@@ -1,0 +1,25 @@
+{
+  "name": "burak",
+  "version": "1.0.0",
+  "description": "This is burakproject backend",
+  "main": "src/server.ts",
+  "type": "module",
+  "scripts": {
+    "start": "ts-node-esm src/server.ts",
+    "start:dev": "nodemon --exec ts-node-esm src/server.ts",
+    "train": "nodemon --exec ts-node-esm train.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ADDY",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.30.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.2.2"
+  }
+}
