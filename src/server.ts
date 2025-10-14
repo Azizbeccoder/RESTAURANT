@@ -1,14 +1,7 @@
-// console.log("Server executed!");
+import dotenv from 'dotenv';
+dotenv.config();
 
-// // Example usage of moment
-// import moment from "moment";
+console.log("PORT:", process.env.PORT);
 
-// const currentTime = moment().format("YYYY-MM-DD HH:mm:ss");
-// console.log("Current time:", currentTime);
-
-// // Example variables
-// const person: string = "Alex";
-// const count: number = 100;
-
-// console.log({ person, count });
-console.log("hello world?");
+// ✅ Correct key name — use process.env.MONGODB_URL
+console.log("MONGODB_URL:", process.env.MONGODB_URL);

@@ -1,5 +1,5 @@
 {
-  "name": "BURAK",
+  "name":"BURAK",
   "version": "1.0.0",
   "description": "This is burakproject backend",
   "main": "src/server.ts",
@@ -13,10 +13,11 @@
   "author": "ADDy",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.0",
     "moment": "^2.30.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10",
+    "nodemon": "^3.0.2",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2"
