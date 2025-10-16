@@ -15,12 +15,20 @@
 // }
 
 // // Example
-// console.log(findMaxIndex([3, 14, 7, 10])); 
-function extractPositiveNumbers(arr: number[]): string {
-  return arr.filter(num => num > 0).join('');
+// // console.log(findMaxIndex([3, 14, 7, 10])); 
+// function extractPositiveNumbers(arr: number[]): string {
+//   return arr.filter(num => num > 0).join('');
+// }
+
+// console.log(extractPositiveNumbers([7, -3, 0, 4])); 
+// console.log(extractPositiveNumbers([-5, -2, -9]));   
+// console.log(extractPositiveNumbers([10, 0, 5, -1])); 
+// console.log(extractPositiveNumbers([1, 2, 3]));     
+
+function extractNumbers(input: string): string {
+  return input.replace(/\D/g, '');
 }
 
-console.log(extractPositiveNumbers([7, -3, 0, 4])); 
-console.log(extractPositiveNumbers([-5, -2, -9]));   
-console.log(extractPositiveNumbers([10, 0, 5, -1])); 
-console.log(extractPositiveNumbers([1, 2, 3]));      
+console.log(extractNumbers("a1b2c3"));    // "123"
+console.log(extractNumbers("hello"));     // ""
+console.log(extractNumbers("room2025"));  // "2025"
