@@ -1,0 +1,107 @@
+<%- include('includes/header', { title: 'Members', page: 'users' }) %>
+
+<main style="padding-top: var(--nav-h);">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="container">
+      <h1 class="section-title" style="color:var(--white);">Our Members</h1>
+      <p style="color:rgba(255,255,255,0.65);">Meet the community of food lovers at Burak</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="table-wrap">
+
+        <!-- Table header -->
+        <div class="table-header">
+          <span class="table-title">
+            All Members
+            <% if (typeof members !== 'undefined') { %>
+              <span style="font-size:0.85rem;font-weight:400;color:var(--text-muted);margin-left:0.5rem;">(<%= members.length %>)</span>
+            <% } %>
+          </span>
+          <input type="text" class="table-search" id="memberSearch" placeholder="🔍 Search members..." oninput="filterMembers(this.value)" />
+        </div>
+
+        <!-- Table -->
+        <div style="overflow-x:auto;">
+          <table id="membersTable">
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Username</th>
+                <th>Phone</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Points</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (typeof members !== 'undefined' && members.length > 0) { %>
+                <% members.forEach(function(m) { %>
+                  <tr>
+                    <td>
+                      <div class="avatar">
+                        <%= m.memberNick ? m.memberNick.charAt(0).toUpperCase() : '?' %>
+                      </div>
+                    </td>
+                    <td style="font-weight:600;"><%= m.memberNick %></td>
+                    <td style="color:var(--text-muted);"><%= m.memberPhone || '—' %></td>
+                    <td>
+                      <% if (m.membertype === 'RESTAURANT') { %>
+                        <span class="badge badge-restaurant">🏪 Restaurant</span>
+                      <% } else { %>
+                        <span class="badge badge-user">👤 User</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% if (m.memberStatus === 'ACTIVE') { %>
+                        <span class="badge badge-active">✅ Active</span>
+                      <% } else if (m.memberStatus === 'BLOCKED') { %>
+                        <span class="badge badge-blocked">🚫 Blocked</span>
+                      <% } else { %>
+                        <span class="badge" style="background:#F3F4F6;color:#6B7280;"><%= m.memberStatus %></span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <span style="color:var(--primary);font-weight:600;">
+                        <%= m.memberPoints || 0 %> pts
+                      </span>
+                    </td>
+                    <td style="color:var(--text-muted); font-size:0.85rem;">
+                      <%= m.createdAt ? new Date(m.createdAt).toLocaleDateString('en-GB') : '—' %>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="7" style="text-align:center; padding:3rem; color:var(--text-muted);">
+                    <div style="font-size:2.5rem; margin-bottom:0.5rem;">👥</div>
+                    No members found yet.
+                    <a href="/signup" style="color:var(--primary); font-weight:600; margin-left:0.25rem;">Be the first!</a>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function filterMembers(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('#membersTable tbody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+</script>
+
+<%- include('includes/footer') %>

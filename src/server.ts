@@ -1,24 +1,26 @@
-//Architectural pattern ; MVC DI MVP;
-
-//MVC = MODEL VIEW CONTROLLER 
-
-
-//design pattern ; Middlewaare , Decotar
-
 import dotenv from "dotenv";
 dotenv.config();
-// console.log("PORT",process.env.PORT);
-// console.log("MONGO_URL",process.env.MONGO_URL);
+
 import mongoose from "mongoose";
-import app from "./app";
+import app from "./app.js"; // ✅ FIXED
+
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3003;
+const MONGO_URL = process.env.MONGO_URL;
+
+if (!MONGO_URL) {
+  throw new Error("❌ MONGO_URL is not defined in .env file");
+}
 
 mongoose
-  .connect(process.env.MONGO_URL as string, {})
-  .then((data) => {
-    console.log("MONGODB connection success");
-    const PORT = process.env.PORT ?? 3003;
-    app.listen(PORT, function() {
-        console.log(`the server is running successfull on port:${PORT}`);
-    })
+  .connect(MONGO_URL)
+  .then(() => {
+    console.log("✅ MongoDB connected successfully");
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port: ${PORT}`);
+    });
   })
-  .catch((err) => console.log("ERROR on connection MONGODB", err));
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1);
+  });

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Burak Restaurant — Authentic flavors, unforgettable experiences" />
+  <title><%= typeof title !== 'undefined' ? title + ' | Burak' : 'Burak Restaurant' %></title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+<!-- ── NAVBAR ─────────────────────────────────────── -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+
+    <!-- Logo -->
+    <a href="/" class="nav-logo">Bur<span>ak</span></a>
+
+    <!-- Nav links -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" class="<%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>">Home</a></li>
+      <li><a href="/products" class="<%= typeof page !== 'undefined' && page === 'products' ? 'active' : '' %>">Menu</a></li>
+      <li><a href="/users" class="<%= typeof page !== 'undefined' && page === 'users' ? 'active' : '' %>">Members</a></li>
+    </ul>
+
+    <!-- Action buttons -->
+    <div class="nav-actions">
+      <% if (typeof member !== 'undefined' && member) { %>
+        <!-- Logged-in state -->
+        <span style="font-size:0.9rem; color:var(--text-muted); margin-right:0.25rem;">
+          👋 <%= member.memberNick %>
+        </span>
+        <form action="/logout" method="POST" style="margin:0;">
+          <button type="submit" class="btn btn-outline" style="padding:0.5rem 1rem;">Logout</button>
+        </form>
+      <% } else { %>
+        <!-- Guest state -->
+        <a href="/login" class="btn btn-outline">Log in</a>
+        <a href="/signup" class="btn btn-primary">Sign up</a>
+      <% } %>
+    </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+</nav>
+<!-- ─────────────
