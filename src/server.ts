@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import mongoose from "mongoose";
-import app from "./app.js"; // ✅ FIXED
+import app from "./app";
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3003;
 const MONGO_URL = process.env.MONGO_URL;
@@ -15,9 +15,10 @@ mongoose
   .connect(MONGO_URL)
   .then(() => {
     console.log("✅ MongoDB connected successfully");
-
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port: ${PORT}`);
+      console.log(`🌍 Open: http://localhost:${PORT}`);
+      console.log(`🔑 Admin: http://localhost:${PORT}/admin`);
     });
   })
   .catch((err) => {

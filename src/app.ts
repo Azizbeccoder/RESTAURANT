@@ -1,26 +1,37 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import path from "path";
-import { fileURLToPath } from "url";
-import router from "./router.js"; // ✅ MUST have .js
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
-// ✅ ESM fix for __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import router from "./router";
+import routerAdmin from "../src/routerAdmin";
+import { MORGAN_FORMAT } from "./libs/types/config";
+import { extractToken, verifyToken } from "./libs/utils/jwt.utils";
 
-// 1-ENTRANCE
 const app = express();
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
+app.use(morgan(MORGAN_FORMAT));
 
-// 2-SESSIONS (optional)
+// JWT middleware — runs on every request, sets req.user if token valid
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const token = extractToken(req);
+  if (token) {
+    const payload = verifyToken(token);
+    if (payload) {
+      req.user = payload;
+    }
+  }
+  next();
+});
 
-// 3-VIEWS
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-// 4-ROUTERS
+app.use("/admin", routerAdmin);
 app.use("/", router);
 
 export default app;
