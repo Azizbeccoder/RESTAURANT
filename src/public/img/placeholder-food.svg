@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#FDF8F0"/>
+  <circle cx="200" cy="130" r="80" fill="#F5E6CC" stroke="#E8C99A" stroke-width="2"/>
+  <circle cx="200" cy="130" r="65" fill="#EDD5A8" opacity="0.6"/>
+  <text x="200" y="140" text-anchor="middle" font-size="50">🍽️</text>
+  <text x="200" y="230" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="#B45309">Burak Menu</text>
+  <text x="200" y="255" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#9CA3AF">Fresh &amp; Delicious</text>
+</svg>
