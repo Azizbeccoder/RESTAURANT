@@ -10,32 +10,32 @@ import { extractToken, verifyToken } from "./libs/utils/jwt.utils";
 
 const app = express();
 
-// ── Static files (public/ at project ROOT — one level up from src/) ──
+// Try both locations for public folder
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-// ── Middleware ────────────────────────────────────────────────────────
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan(MORGAN_FORMAT));
 
-// ── JWT global middleware ─────────────────────────────────────────────
+// JWT middleware
 app.use((req: Request, res: Response, next: NextFunction) => {
   const token = extractToken(req);
   if (token) {
     const payload = verifyToken(token);
-    if (payload) {
-      req.user = payload;
-    }
+    if (payload) req.user = payload;
   }
   next();
 });
 
-// ── Views (views/ at project ROOT — one level up from src/) ──────────
-app.set("views", path.join(__dirname, "..", "views"));
+// Try both locations for views folder
+app.set("views", [
+  path.join(__dirname, "views"),
+  path.join(__dirname, "..", "views"),
+]);
 app.set("view engine", "ejs");
 
-// ── Routers ───────────────────────────────────────────────────────────
 app.use("/admin", routerAdmin);
 app.use("/", router);
 
