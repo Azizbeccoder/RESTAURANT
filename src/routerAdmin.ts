@@ -7,6 +7,7 @@ const routerAdmin = express.Router();
 routerAdmin.get("/", restaurantController.goHome);
 routerAdmin.route("/login").get(restaurantController.getLogin).post(restaurantController.processLogin);
 routerAdmin.route("/signup").get(restaurantController.getSignUp).post(restaurantController.processSignup);
+routerAdmin.get("/dashboard", isAuthenticated, isRestaurant, restaurantController.getDashboard);
 routerAdmin.post("/logout", isAuthenticated, isRestaurant, restaurantController.processLogout);
 
 export default routerAdmin;
