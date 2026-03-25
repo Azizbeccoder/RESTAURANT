@@ -2,13 +2,13 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-col">
-       <div class="footer-brand-name"><span>Z</span>entix</div>
+        <div class="footer-brand-name">Bur<span>ak</span></div>
         <p class="footer-brand-desc">Authentic flavors crafted with passion. From the heart of the kitchen to your table — every dish tells a story.</p>
         <div class="social-links">
-          <a href="#" class="social-link" aria-label="Instagram">📷</a>
-          <a href="#" class="social-link" aria-label="Twitter">🐦</a>
-          <a href="#" class="social-link" aria-label="Facebook">📘</a>
-          <a href="#" class="social-link" aria-label="YouTube">▶️</a>
+          <a href="#" class="social-link">📷</a>
+          <a href="#" class="social-link">🐦</a>
+          <a href="#" class="social-link">📘</a>
+          <a href="#" class="social-link">▶️</a>
         </div>
       </div>
       <div class="footer-col">
@@ -26,7 +26,6 @@
           <li><a href="/login">Log In</a></li>
           <li><a href="/signup">Sign Up</a></li>
           <li><a href="/admin/login">Restaurant Login</a></li>
-          <li><a href="#">My Orders</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -51,78 +50,61 @@ document.addEventListener('DOMContentLoaded', function() {
   var navbar = document.getElementById('navbar');
   if (navbar) {
     window.addEventListener('scroll', function() {
-      navbar.classList.toggle('scrolled', window.scrollY > 20);
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
     }, { passive: true });
   }
   var hamburger = document.getElementById('hamburger');
-  var navLinks = document.getElementById('navLinks');
+  var navLinks  = document.getElementById('navLinks');
   if (hamburger && navLinks) {
     hamburger.addEventListener('click', function() {
-      navLinks.classList.toggle('open');
-      var bars = hamburger.querySelectorAll('span');
-      if (navLinks.classList.contains('open')) {
-        bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-        bars[1].style.opacity = '0';
-        bars[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-      } else {
-        bars.forEach(function(b) { b.style.transform = ''; b.style.opacity = ''; });
-      }
+      var open = navLinks.style.display === 'flex';
+      navLinks.style.display = open ? 'none' : 'flex';
+      navLinks.style.flexDirection = 'column';
+      navLinks.style.position = 'absolute';
+      navLinks.style.top = '80px';
+      navLinks.style.left = '0';
+      navLinks.style.right = '0';
+      navLinks.style.background = 'rgba(13,10,6,0.98)';
+      navLinks.style.padding = '2rem';
+      navLinks.style.gap = '1.5rem';
     });
   }
-  var loginForm = document.getElementById('loginForm');
+  var loginForm  = document.getElementById('loginForm');
   var signupForm = document.getElementById('signupForm');
-  function showError(input, message) {
-    input.classList.add('error');
-    var err = input.parentElement.querySelector('.field-error');
+  function showError(input, msg) {
+    input.style.borderColor = '#C0392B';
+    var err = input.parentElement.querySelector('.ferr');
     if (!err) {
       err = document.createElement('p');
-      err.className = 'field-error';
-      err.style.cssText = 'color:#C0392B;font-size:0.78rem;margin-top:0.25rem;';
+      err.className = 'ferr';
+      err.style.cssText = 'color:#C0392B;font-size:0.75rem;margin-top:4px;';
       input.parentElement.appendChild(err);
     }
-    err.textContent = message;
+    err.textContent = msg;
     input.addEventListener('input', function() {
-      input.classList.remove('error');
+      input.style.borderColor = '';
       if (err) err.textContent = '';
-    });
+    }, { once: true });
   }
   if (loginForm) {
     loginForm.addEventListener('submit', function(e) {
-      var nick = document.getElementById('memberNick');
-      var pass = document.getElementById('memberPassword');
-      var valid = true;
-      if (!nick.value.trim()) { showError(nick, 'Username is required'); valid = false; }
-      if (!pass.value.trim()) { showError(pass, 'Password is required'); valid = false; }
-      if (!valid) e.preventDefault();
+      var n = document.getElementById('memberNick');
+      var p = document.getElementById('memberPassword');
+      var ok = true;
+      if (!n.value.trim()) { showError(n, 'Username required'); ok = false; }
+      if (!p.value.trim()) { showError(p, 'Password required'); ok = false; }
+      if (!ok) e.preventDefault();
     });
   }
   if (signupForm) {
     signupForm.addEventListener('submit', function(e) {
-      var nick = document.getElementById('memberNick');
-      var pass = document.getElementById('memberPassword');
-      var valid = true;
-      if (!nick || nick.value.length < 3) { if(nick) showError(nick, 'At least 3 characters'); valid = false; }
-      if (!pass || pass.value.length < 6) { if(pass) showError(pass, 'At least 6 characters'); valid = false; }
-      if (!valid) e.preventDefault();
+      var n = document.getElementById('memberNick');
+      var p = document.getElementById('memberPassword');
+      var ok = true;
+      if (n && n.value.length < 3) { showError(n, 'At least 3 characters'); ok = false; }
+      if (p && p.value.length < 6) { showError(p, 'At least 6 characters'); ok = false; }
+      if (!ok) e.preventDefault();
     });
-  }
-  if ('IntersectionObserver' in window) {
-    var fadeEls = document.querySelectorAll('.fade-up, .fade-up-2, .fade-up-3');
-    fadeEls.forEach(function(el) {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(30px)';
-    });
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    fadeEls.forEach(function(el) { obs.observe(el); });
   }
 });
 </script>

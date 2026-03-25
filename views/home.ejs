@@ -1,270 +1,255 @@
 <%- include('includes/header', { title: 'Home', page: 'home' }) %>
 
-<section class="hero-new">
-  <div class="hero-particles" id="particles"></div>
-  <div class="hero-split-bg"></div>
-  <div class="hero-new-inner">
+<!-- ══ HERO — full screen background ══ -->
+<section class="hero-full">
+  <!-- Dark overlay -->
+  <div class="hero-overlay"></div>
 
-    <div class="hero-left">
-      <div class="hero-tag">
-        <span class="hero-tag-dot"></span>
-        Est. 2024 · Tashkent, Uzbekistan
-      </div>
-      <h1 class="hero-heading">
-        Where Bold<br/>Flavors Meet<br/>
-        <em class="hero-em">Fine Craft</em>
-      </h1>
-      <p class="hero-sub">Handcrafted dishes from the finest ingredients. Every plate tells a story — yours starts here.</p>
-      <div class="hero-stats-row">
-        <div class="hero-stat">
-          <span class="hero-stat-num">200<sup>+</sup></span>
-          <span class="hero-stat-label">Dishes</span>
-        </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">12</span>
-          <span class="hero-stat-label">Chefs</span>
-        </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">4.9<sup>★</sup></span>
-          <span class="hero-stat-label">Rating</span>
-        </div>
-      </div>
-      <div class="hero-cta-row">
-        <a href="/products" class="btn-hero-primary">
-          Explore Menu
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="/signup" class="btn-hero-ghost">Join Free</a>
-      </div>
-      <% if (typeof member !== 'undefined' && member) { %>
-      <div class="hero-member-badge">
-        <span class="hero-member-avatar"><%= member.memberNick.charAt(0).toUpperCase() %></span>
-        <div>
-          <div style="font-weight:600;color:#fff;">Welcome back, <%= member.memberNick %>!</div>
-          <div style="font-size:0.82rem;color:#C8860A;"><%= member.memberPoints || 0 %> loyalty points</div>
-        </div>
-      </div>
-      <% } %>
-    </div>
+  <!-- Background food image using CSS -->
+  <div class="hero-bg"></div>
 
-    <div class="hero-right">
-      <div class="hero-glow"></div>
+  <!-- Top info bar -->
+  <div class="hero-topbar">
+    <span>📞 +998 90 123 45 67</span>
+    <span>✉️ hello@burak.uz</span>
+    <span>🕐 Mon–Sun: 10:00AM – 10:00PM</span>
+  </div>
 
-      <div class="hero-orb orb-1">
-        <div class="orb-ring"></div>
-        <div class="orb-inner">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="pl1" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#F5E6CC"/><stop offset="100%" stop-color="#D4B896"/></radialGradient>
-              <radialGradient id="m1" cx="40%" cy="35%" r="70%"><stop offset="0%" stop-color="#C05020"/><stop offset="100%" stop-color="#7A2800"/></radialGradient>
-            </defs>
-            <ellipse cx="100" cy="165" rx="75" ry="12" fill="#0a0604" opacity="0.5"/>
-            <ellipse cx="100" cy="105" rx="78" ry="78" fill="#2A1A08" opacity="0.4"/>
-            <ellipse cx="100" cy="103" rx="72" ry="72" fill="url(#pl1)"/>
-            <ellipse cx="100" cy="103" rx="64" ry="64" fill="none" stroke="#C8860A" stroke-width="1.5" opacity="0.4"/>
-            <ellipse cx="100" cy="108" rx="42" ry="30" fill="url(#m1)"/>
-            <ellipse cx="100" cy="104" rx="38" ry="26" fill="#B04820"/>
-            <rect x="68" y="72" width="8" height="28" rx="4" fill="#F0E8D8"/>
-            <rect x="82" y="68" width="8" height="28" rx="4" fill="#F0E8D8"/>
-            <rect x="96" y="66" width="8" height="28" rx="4" fill="#F0E8D8"/>
-            <rect x="110" y="68" width="8" height="28" rx="4" fill="#F0E8D8"/>
-            <rect x="124" y="72" width="8" height="28" rx="4" fill="#F0E8D8"/>
-            <ellipse cx="78" cy="118" rx="14" ry="7" fill="#2D6A2D"/>
-            <ellipse cx="122" cy="116" rx="12" ry="6" fill="#3A8A3A"/>
-            <path d="M85 100 Q100 92 115 100 Q122 106 115 112" stroke="#C8860A" stroke-width="2.5" fill="none" opacity="0.7" stroke-linecap="round"/>
-            <text x="100" y="185" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#C8860A" opacity="0.9">Slow-Roasted Lamb</text>
-          </svg>
-        </div>
-        <div class="orb-price">$36</div>
-      </div>
-
-      <div class="hero-orb orb-2">
-        <div class="orb-ring"></div>
-        <div class="orb-inner">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="pl2" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#F5E6CC"/><stop offset="100%" stop-color="#D4B896"/></radialGradient>
-            </defs>
-            <ellipse cx="100" cy="165" rx="68" ry="10" fill="#0a0604" opacity="0.4"/>
-            <ellipse cx="100" cy="108" rx="65" ry="65" fill="#2A1A08" opacity="0.3"/>
-            <ellipse cx="100" cy="106" rx="60" ry="60" fill="url(#pl2)"/>
-            <ellipse cx="100" cy="110" rx="38" ry="28" fill="#D4A855"/>
-            <ellipse cx="100" cy="108" rx="34" ry="24" fill="#E8C070"/>
-            <ellipse cx="100" cy="108" rx="14" ry="10" fill="#C8860A" opacity="0.6"/>
-            <circle cx="86" cy="105" r="3" fill="#C03020" opacity="0.8"/>
-            <circle cx="114" cy="105" r="3" fill="#C03020" opacity="0.8"/>
-            <circle cx="100" cy="100" r="2.5" fill="#C03020" opacity="0.8"/>
-            <ellipse cx="68" cy="120" rx="15" ry="8" fill="#D4A060" transform="rotate(-20,68,120)"/>
-            <ellipse cx="132" cy="118" rx="14" ry="7" fill="#C8904A" transform="rotate(15,132,118)"/>
-            <path d="M75 95 Q80 88 85 95" stroke="#2D6A2D" stroke-width="2" fill="none"/>
-            <path d="M115 93 Q120 86 125 93" stroke="#2D6A2D" stroke-width="2" fill="none"/>
-            <text x="100" y="185" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#C8860A" opacity="0.9">Mezze Platter</text>
-          </svg>
-        </div>
-        <div class="orb-price">$18</div>
-      </div>
-
-      <div class="hero-orb orb-3">
-        <div class="orb-ring"></div>
-        <div class="orb-inner">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="pl3" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#F5E6CC"/><stop offset="100%" stop-color="#D4B896"/></radialGradient>
-            </defs>
-            <ellipse cx="100" cy="168" rx="62" ry="9" fill="#0a0604" opacity="0.4"/>
-            <ellipse cx="100" cy="110" rx="60" ry="60" fill="#2A1A08" opacity="0.3"/>
-            <ellipse cx="100" cy="108" rx="55" ry="55" fill="url(#pl3)"/>
-            <rect x="68" y="90" width="64" height="38" rx="4" fill="#C8860A"/>
-            <rect x="70" y="88" width="60" height="6" rx="2" fill="#D4A020"/>
-            <rect x="70" y="95" width="60" height="6" rx="2" fill="#C8860A"/>
-            <rect x="70" y="102" width="60" height="6" rx="2" fill="#D4A020"/>
-            <rect x="70" y="109" width="60" height="6" rx="2" fill="#C8860A"/>
-            <rect x="70" y="116" width="60" height="6" rx="2" fill="#B87800"/>
-            <line x1="68" y1="90" x2="132" y2="128" stroke="#8B5500" stroke-width="1" opacity="0.5"/>
-            <line x1="100" y1="90" x2="100" y2="128" stroke="#8B5500" stroke-width="1" opacity="0.5"/>
-            <line x1="132" y1="90" x2="68" y2="128" stroke="#8B5500" stroke-width="1" opacity="0.5"/>
-            <path d="M88 85 Q90 78 92 85" stroke="#FFD700" stroke-width="2" fill="none" opacity="0.8"/>
-            <path d="M108 83 Q110 76 112 83" stroke="#FFD700" stroke-width="2" fill="none" opacity="0.8"/>
-            <ellipse cx="80" cy="135" rx="6" ry="4" fill="#4A7A20" transform="rotate(-20,80,135)"/>
-            <ellipse cx="100" cy="138" rx="6" ry="4" fill="#4A7A20"/>
-            <ellipse cx="120" cy="135" rx="6" ry="4" fill="#4A7A20" transform="rotate(20,120,135)"/>
-            <text x="100" y="186" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#C8860A" opacity="0.9">Baklava Supreme</text>
-          </svg>
-        </div>
-        <div class="orb-price">$9</div>
-      </div>
-
-      <div class="hero-badge-float badge-f1"><span>🌿</span> Farm Fresh</div>
-      <div class="hero-badge-float badge-f2"><span>⚡</span> 30 min delivery</div>
-      <div class="hero-badge-float badge-f3"><span>🏆</span> Award Winning</div>
+  <!-- Center content -->
+  <div class="hero-center">
+    <div class="hero-script">Burak</div>
+    <h1 class="hero-main">BEST RESTAURANT<br>IN TASHKENT</h1>
+    <p class="hero-desc">Authentic flavors crafted with passion. Fresh ingredients, bold recipes, and memories that last a lifetime.</p>
+    <div class="hero-btns">
+      <a href="/products" class="btn-reserve">View Our Menu</a>
+      <a href="/signup" class="btn-ghost-white">Join Free</a>
     </div>
   </div>
 
-  <div class="hero-wave">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#FDFAF5"/>
-    </svg>
+  <!-- Bottom dish cards row -->
+  <div class="dish-cards-row">
+    <div class="dish-card">
+      <div class="dish-circle">
+        <div class="dish-emoji">🍖</div>
+      </div>
+      <div class="dish-card-name">Slow-Roasted Lamb</div>
+      <div class="dish-card-tags">Lamb, Herbs, Spices</div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-circle">
+        <div class="dish-emoji">🥗</div>
+      </div>
+      <div class="dish-card-name">Mezze Platter</div>
+      <div class="dish-card-tags">Hummus, Pita, Veggies</div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-circle">
+        <div class="dish-emoji">🫕</div>
+      </div>
+      <div class="dish-card-name">Beef Tagine</div>
+      <div class="dish-card-tags">Beef, Apricots, Almonds</div>
+    </div>
+    <div class="dish-card">
+      <div class="dish-circle">
+        <div class="dish-emoji">🍰</div>
+      </div>
+      <div class="dish-card-name">Baklava Supreme</div>
+      <div class="dish-card-tags">Pistachio, Honey, Phyllo</div>
+    </div>
   </div>
 </section>
 
-<div class="marquee-strip">
-  <div class="marquee-track">
-    <span>Slow-Roasted Lamb</span><span class="mq-dot">◆</span>
-    <span>Mezze Platter</span><span class="mq-dot">◆</span>
-    <span>Baklava Supreme</span><span class="mq-dot">◆</span>
-    <span>Shawarma</span><span class="mq-dot">◆</span>
-    <span>Fresh Lemonade</span><span class="mq-dot">◆</span>
-    <span>Kunafa</span><span class="mq-dot">◆</span>
-    <span>Beef Tagine</span><span class="mq-dot">◆</span>
-    <span>Couscous</span><span class="mq-dot">◆</span>
-    <span>Slow-Roasted Lamb</span><span class="mq-dot">◆</span>
-    <span>Mezze Platter</span><span class="mq-dot">◆</span>
-    <span>Baklava Supreme</span><span class="mq-dot">◆</span>
-    <span>Shawarma</span><span class="mq-dot">◆</span>
-    <span>Fresh Lemonade</span><span class="mq-dot">◆</span>
-    <span>Kunafa</span><span class="mq-dot">◆</span>
-    <span>Beef Tagine</span><span class="mq-dot">◆</span>
-    <span>Couscous</span><span class="mq-dot">◆</span>
-  </div>
-</div>
-
-<section class="section" style="background:var(--bg);">
+<!-- ══ ABOUT STRIP ══ -->
+<section class="about-strip">
   <div class="container">
-    <div class="section-center">
-      <h2 class="section-title">Our Signature Dishes</h2>
-      <p class="section-subtitle">Handpicked favorites from our kitchen to your table</p>
+    <div class="about-grid">
+      <div class="about-stat">
+        <div class="about-num">200<span>+</span></div>
+        <div class="about-label">Menu Items</div>
+      </div>
+      <div class="about-divider"></div>
+      <div class="about-stat">
+        <div class="about-num">12</div>
+        <div class="about-label">Expert Chefs</div>
+      </div>
+      <div class="about-divider"></div>
+      <div class="about-stat">
+        <div class="about-num">15k<span>+</span></div>
+        <div class="about-label">Happy Guests</div>
+      </div>
+      <div class="about-divider"></div>
+      <div class="about-stat">
+        <div class="about-num">4.9<span>★</span></div>
+        <div class="about-label">Average Rating</div>
+      </div>
     </div>
-    <div class="card-grid card-grid-3">
-      <article class="card fade-up">
-        <div class="card-img-placeholder">🍖</div>
-        <div class="card-body">
-          <div class="card-tag">Best Seller</div>
-          <h3 class="card-title">Slow-Roasted Lamb</h3>
-          <p class="card-desc">Tender lamb marinated overnight with aromatic herbs and slow-cooked to perfection.</p>
-          <div class="card-footer"><span class="card-price">$28.00</span><a href="/products" class="btn btn-primary">Order Now</a></div>
-        </div>
-      </article>
-      <article class="card fade-up-2">
-        <div class="card-img-placeholder">🥗</div>
-        <div class="card-body">
-          <div class="card-tag">Chef's Choice</div>
-          <h3 class="card-title">Mezze Platter</h3>
-          <p class="card-desc">A colorful spread of hummus, baba ganoush, fresh vegetables, and warm flatbread.</p>
-          <div class="card-footer"><span class="card-price">$18.00</span><a href="/products" class="btn btn-primary">Order Now</a></div>
-        </div>
-      </article>
-      <article class="card fade-up-3">
-        <div class="card-img-placeholder">🍰</div>
-        <div class="card-body">
-          <div class="card-tag">Dessert</div>
-          <h3 class="card-title">Baklava Supreme</h3>
-          <p class="card-desc">Layers of flaky phyllo pastry, crushed pistachios, and golden honey syrup.</p>
-          <div class="card-footer"><span class="card-price">$9.00</span><a href="/products" class="btn btn-primary">Order Now</a></div>
-        </div>
-      </article>
-    </div>
-    <div class="text-center mt-3"><a href="/products" class="btn btn-outline btn-lg">View Full Menu →</a></div>
   </div>
 </section>
 
-<section class="section" style="background:var(--bg-warm);">
+<!-- ══ MENU SECTION ══ -->
+<section class="menu-section">
   <div class="container">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
-      <div>
-        <h2 class="section-title">Why Guests Love <span class="text-primary">Burak</span></h2>
-        <p class="section-subtitle">More than a restaurant — a culinary journey.</p>
-        <div class="feature-list">
-          <div class="feature-item"><div class="feature-icon">🌿</div><div class="feature-text"><h4>Farm-Fresh Ingredients</h4><p>Every dish starts with premium, locally sourced ingredients picked at peak freshness.</p></div></div>
-          <div class="feature-item"><div class="feature-icon">👨‍🍳</div><div class="feature-text"><h4>Master Chefs</h4><p>Our chefs bring decades of culinary expertise and passion to every single plate.</p></div></div>
-          <div class="feature-item"><div class="feature-icon">🚀</div><div class="feature-text"><h4>Fast Delivery</h4><p>Order online and receive your food hot and fresh within 30 minutes.</p></div></div>
-          <div class="feature-item"><div class="feature-icon">💎</div><div class="feature-text"><h4>Loyalty Rewards</h4><p>Earn points with every order and redeem them for exclusive discounts.</p></div></div>
-        </div>
-      </div>
-      <div style="background:var(--white);border-radius:var(--radius-lg);padding:2.5rem;border:1px solid var(--border);box-shadow:var(--shadow-md);">
-        <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:0.5rem;">Join Our Community</h3>
-        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Create a free account and start earning rewards with your first order.</p>
-        <% if (typeof member === 'undefined' || !member) { %>
-          <a href="/signup" class="btn btn-primary btn-full btn-lg" style="margin-bottom:0.75rem;">Create Free Account</a>
-          <a href="/login" class="btn btn-outline btn-full">Already a member? Log in</a>
-        <% } else { %>
-          <div style="text-align:center;padding:1rem;">
-            <div style="font-size:2.5rem;margin-bottom:0.5rem;">🎉</div>
-            <p style="font-weight:600;">Welcome back, <%= member.memberNick %>!</p>
-            <p style="color:var(--text-muted);font-size:0.9rem;">You have <strong style="color:var(--primary);"><%= member.memberPoints || 0 %> points</strong></p>
+    <div class="section-tag">Our Specialties</div>
+    <h2 class="section-heading">Signature Dishes</h2>
+    <p class="section-sub">Every dish crafted with passion and the finest ingredients</p>
+
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="menu-img">🍖</div>
+        <div class="menu-info">
+          <div class="menu-top">
+            <span class="menu-name">Slow-Roasted Lamb</span>
+            <span class="menu-price">$36</span>
           </div>
-        <% } %>
+          <div class="menu-desc">24-hour marinated lamb with roasted vegetables and aromatic spices</div>
+          <div class="menu-tags"><span>Best Seller</span><span>Signature</span></div>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img">🥗</div>
+        <div class="menu-info">
+          <div class="menu-top">
+            <span class="menu-name">Mezze Platter</span>
+            <span class="menu-price">$18</span>
+          </div>
+          <div class="menu-desc">Hummus, baba ganoush, tabbouleh, fresh pita and seasonal vegetables</div>
+          <div class="menu-tags"><span>Vegetarian</span><span>Sharing</span></div>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img">🍗</div>
+        <div class="menu-info">
+          <div class="menu-top">
+            <span class="menu-name">Grilled Shawarma</span>
+            <span class="menu-price">$22</span>
+          </div>
+          <div class="menu-desc">Spiced chicken with garlic sauce, pickles and fresh herbs in warm bread</div>
+          <div class="menu-tags"><span>Popular</span></div>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img">🫕</div>
+        <div class="menu-info">
+          <div class="menu-top">
+            <span class="menu-name">Beef Tagine</span>
+            <span class="menu-price">$29</span>
+          </div>
+          <div class="menu-desc">Slow-cooked beef with apricots, almonds and warm Moroccan spices</div>
+          <div class="menu-tags"><span>Chef's Choice</span></div>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img">🍮</div>
+        <div class="menu-info">
+          <div class="menu-top">
+            <span class="menu-name">Kunafa</span>
+            <span class="menu-price">$11</span>
+          </div>
+          <div class="menu-desc">Crispy shredded pastry soaked in sweet syrup with creamy cheese filling</div>
+          <div class="menu-tags"><span>Dessert</span></div>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-img">🍰</div>
+        <div class="menu-info">
+          <div class="menu-top">
+            <span class="menu-name">Baklava Supreme</span>
+            <span class="menu-price">$9</span>
+          </div>
+          <div class="menu-desc">Layered phyllo pastry with pistachios, walnuts and rose-water honey</div>
+          <div class="menu-tags"><span>Dessert</span><span>Sweet</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:3rem;">
+      <a href="/products" class="btn-reserve">See Full Menu</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DARK STORY SECTION ══ -->
+<section class="story-section">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-left">
+        <div class="story-food-grid">
+          <div class="sfood s1">🥩</div>
+          <div class="sfood s2">🌶️</div>
+          <div class="sfood s3">🫒</div>
+          <div class="sfood s4">🧄</div>
+        </div>
+      </div>
+      <div class="story-right">
+        <div class="section-tag light">Our Story</div>
+        <h2 class="section-heading light">Passion on<br>Every Plate</h2>
+        <p class="story-text">Founded in Tashkent with a dream to share authentic flavors from across the region. Our chefs bring decades of culinary expertise, using only the freshest locally-sourced ingredients.</p>
+        <p class="story-text">Every dish is a journey — from the fragrant spice markets to your table. We believe great food brings people together.</p>
+        <div class="story-features">
+          <div class="story-feat"><span class="feat-icon">🌿</span><span>Farm-fresh ingredients daily</span></div>
+          <div class="story-feat"><span class="feat-icon">👨‍🍳</span><span>Master chefs with 20+ years experience</span></div>
+          <div class="story-feat"><span class="feat-icon">🚀</span><span>30-minute delivery guarantee</span></div>
+        </div>
+        <a href="/users" class="btn-reserve" style="margin-top:2rem;display:inline-block;">Meet Our Community</a>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" style="background:var(--bg);">
+<!-- ══ TESTIMONIALS ══ -->
+<section class="testi-section">
   <div class="container">
-    <div class="section-center">
-      <h2 class="section-title">What Our Guests Say</h2>
-      <p class="section-subtitle">Real reviews from real food lovers</p>
-    </div>
-    <div class="card-grid card-grid-3">
-      <div class="testimonial-card fade-up"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"The lamb was cooked to absolute perfection. Burak stands out in every way possible."</p><div class="testimonial-author"><div class="avatar">AK</div><div><div class="testimonial-name">Aziz Karimov</div><div class="testimonial-role">Food Blogger</div></div></div></div>
-      <div class="testimonial-card fade-up-2"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"Food arrived hot and fresh within 25 minutes. The packaging was beautiful and taste outstanding!"</p><div class="testimonial-author"><div class="avatar">SN</div><div><div class="testimonial-name">Sabohat Nazarova</div><div class="testimonial-role">Regular Customer</div></div></div></div>
-      <div class="testimonial-card fade-up-3"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"The loyalty points system is amazing! The baklava is simply heaven on a plate."</p><div class="testimonial-author"><div class="avatar">JM</div><div><div class="testimonial-name">Jasur Mirzayev</div><div class="testimonial-role">VIP Member</div></div></div></div>
+    <div class="section-tag">Reviews</div>
+    <h2 class="section-heading">What Guests Say</h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The lamb was cooked to absolute perfection. Best restaurant experience I've had in Tashkent."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AK</div>
+          <div><div class="testi-name">Aziz Karimov</div><div class="testi-role">Food Blogger</div></div>
+        </div>
+      </div>
+      <div class="testi-card featured">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Food arrived hot within 25 minutes. Beautiful packaging and the taste was absolutely outstanding!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SN</div>
+          <div><div class="testi-name">Sabohat Nazarova</div><div class="testi-role">Regular Customer</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The baklava is simply heaven. I've been coming here every week for the past year."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JM</div>
+          <div><div class="testi-name">Jasur Mirzayev</div><div class="testi-role">VIP Member</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<script>
-(function(){
-  var c=document.getElementById('particles');
-  if(!c)return;
-  for(var i=0;i<28;i++){
-    var p=document.createElement('div');
-    p.className='particle';
-    p.style.cssText='left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px;animation-delay:'+Math.random()*6+'s;animation-duration:'+(4+Math.random()*6)+'s;opacity:'+(0.2+Math.random()*0.4)+';';
-    c.appendChild(p);
-  }
-})();
-</script>
+<!-- ══ JOIN / CTA ══ -->
+<section class="cta-section">
+  <div class="cta-overlay"></div>
+  <div class="cta-bg"></div>
+  <div class="container cta-inner">
+    <div class="section-tag light">Join Burak</div>
+    <h2 class="cta-heading">Ready to Experience<br>the Best?</h2>
+    <p class="cta-sub">Create a free account and start earning loyalty points with every order.</p>
+    <% if (typeof member === 'undefined' || !member) { %>
+      <div class="cta-btns">
+        <a href="/signup" class="btn-reserve">Create Free Account</a>
+        <a href="/login" class="btn-ghost-white">Log In</a>
+      </div>
+    <% } else { %>
+      <div style="margin-top:2rem;">
+        <p style="color:rgba(255,255,255,0.9);font-size:1.1rem;">Welcome back, <strong style="color:#C8860A;"><%= member.memberNick %></strong>! You have <strong style="color:#C8860A;"><%= member.memberPoints || 0 %></strong> loyalty points.</p>
+        <a href="/products" class="btn-reserve" style="margin-top:1rem;display:inline-block;">Order Now</a>
+      </div>
+    <% } %>
+  </div>
+</section>
 
 <%- include('includes/footer') %>
