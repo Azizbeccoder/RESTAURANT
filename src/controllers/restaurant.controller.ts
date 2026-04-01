@@ -1,110 +1,163 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { T } from "../libs/types/common";
 import MemberService from "../models/Member.service";
-import { LoginInput, MemberInput } from "../libs/types/member";
+import { AdminRequest, LoginInput, MemberInput } from "../libs/types/member";
 import { MemberType } from "../libs/enums/member.enum";
-import { createAccessToken, setTokenCookie, clearTokenCookie } from "../libs/utils/jwt.utils";
+import Errors, { HttpCode, Message } from "../libs/Errors";
+import Erros from "../libs/Errors";
+
+const memberService = new MemberService();
 
 const restaurantController: T = {};
 
 restaurantController.goHome = (req: Request, res: Response) => {
   try {
-    if (req.user && req.user.memberType === "RESTAURANT") {
-      res.redirect("/admin/dashboard");
-    } else {
-      res.redirect("/admin/login");
-    }
+    console.log("goHome");
+    res.render("home");
   } catch (err) {
-    console.log("Error, goHome:", err);
+    console.log("ERROR, goHome", err);
+    res.redirect("/admin");
   }
 };
 
+restaurantController.getSignup = (req: Request, res: Response) => {
+  try {
+    res.render("signup");
+  } catch (err) {
+    console.log("ERROR, getSignup", err);
+    res.redirect("/admin");
+  }
+};
 restaurantController.getLogin = (req: Request, res: Response) => {
   try {
-    if (req.user && req.user.memberType === "RESTAURANT") {
-      return res.redirect("/admin/dashboard");
-    }
-    res.render("admin/login", { title: "Admin Login", page: "admin", error: null, formData: {} });
+    res.render("login");
   } catch (err) {
-    console.log("Error, getLogin:", err);
+    console.log("ERROR, getLogin", err);
+    res.redirect("/admin");
   }
 };
 
-restaurantController.getSignUp = (req: Request, res: Response) => {
+restaurantController.processSignup = async (
+  req: AdminRequest,
+  res: Response
+) => {
   try {
-    res.render("admin/signup", { title: "Admin Register", page: "admin", error: null, formData: {} });
-  } catch (err) {
-    console.log("Error, getSignUp:", err);
-  }
-};
+    console.log("processSignup");
+    console.log("req.body:", req.body);
+    const file = req.file;
+    if (!file)
+      throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
 
-restaurantController.getDashboard = async (req: Request, res: Response) => {
-  try {
-    const memberService = new MemberService();
-    const members = await memberService.getMembers();
-    res.render("admin/dashboard", {
-      title: "Admin Dashboard",
-      page: "admin",
-      member: req.user || null,
-      members,
-    });
-  } catch (err) {
-    console.log("Error, getDashboard:", err);
-    res.status(500).send("Server error");
-  }
-};
-
-restaurantController.processLogin = async (req: Request, res: Response) => {
-  try {
-    const input: LoginInput = req.body;
-    const memberService = new MemberService();
-    const member = await memberService.processLogin(input);
-    if (member.membertype !== MemberType.RESTAURANT) {
-      return res.render("admin/login", {
-        title: "Admin Login", page: "admin",
-        error: "This account is not a restaurant admin.",
-        formData: req.body || {},
-      });
-    }
-    const token = createAccessToken(member);
-    setTokenCookie(res, token);
-    res.redirect("/admin/dashboard");
-  } catch (err) {
-    console.log("Error, processLogin:", err);
-    res.render("admin/login", {
-      title: "Admin Login", page: "admin",
-      error: (err as Error).message || "Login failed.",
-      formData: req.body || {},
-    });
-  }
-};
-
-restaurantController.processSignup = async (req: Request, res: Response) => {
-  try {
     const newMember: MemberInput = req.body;
-    newMember.membertype = MemberType.RESTAURANT;
-    const memberService = new MemberService();
-    const member = await memberService.processSignup(newMember);
-    const token = createAccessToken(member);
-    setTokenCookie(res, token);
-    res.redirect("/admin/dashboard");
-  } catch (err) {
-    console.log("Error, processSignup:", err);
-    res.render("admin/signup", {
-      title: "Admin Register", page: "admin",
-      error: (err as Error).message || "Signup failed.",
-      formData: req.body || {},
+    newMember.memberImage = file?.path;
+    newMember.memberType = MemberType.RESTAURANT;
+    const result = await memberService.processSignup(newMember);
+    //TODO: SESSIONS AUTHENTICATION
+    req.session.member = result;
+    req.session.save(function () {
+      res.redirect("/admin/product/all");
     });
+  } catch (err) {
+    console.log("ERROR, processSignup", err);
+    const message =
+      err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    res.send(
+      `<script> alert("${message}"); window.location.replace('/admin/signup') </script>`
+    );
   }
 };
 
-restaurantController.processLogout = (req: Request, res: Response) => {
+restaurantController.processLogin = async (
+  req: AdminRequest,
+  res: Response
+) => {
   try {
-    clearTokenCookie(res);
-    res.redirect("/admin/login");
+    console.log("processLogin");
+
+    const input: LoginInput = req.body;
+    const result = await memberService.processLogin(input);
+    //TODO: SESSIONS AUTHENTICATION
+
+    req.session.member = result;
+    req.session.save(function () {
+      res.redirect("/admin/product/all");
+    });
   } catch (err) {
-    console.log("Error, processLogout:", err);
-    res.status(500).send("Logout failed");
+    console.log("ERROR, processLogin", err);
+    const message =
+      err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+    res.send(
+      `<script> alert("${message}"); window.location.replace('/admin/login') </script>`
+    );
+  }
+};
+
+restaurantController.logout = async (req: AdminRequest, res: Response) => {
+  try {
+    console.log("processLogin");
+
+    req.session.destroy(function () {
+      res.redirect("/admin");
+    });
+  } catch (err) {
+    console.log("ERROR, processLogin", err);
+    res.redirect("/admin");
+  }
+};
+
+restaurantController.getUsers = async (req: Request, res: Response) => {
+  try {
+    console.log("getUsers");
+    const result = await memberService.getUsers();
+    console.log("result", result);
+    res.render("users", { users: result });
+  } catch (err) {
+    console.log("ERROR, getUsers", err);
+    res.redirect("/admin/login");
+  }
+};
+
+restaurantController.updateChosenUser = async (req: Request, res: Response) => {
+  try {
+    console.log("updateChosenUser");
+    const result = await memberService.updateChosenUser(req.body);
+
+    res.status(HttpCode.OK).json({ data: result });
+  } catch (err) {
+    console.log("ERROR, updateChosenUser", err);
+    if (err instanceof Erros) res.status(err.code).json(err);
+    else res.status(Erros.standard.code).json(Erros.standard);
+  }
+};
+
+restaurantController.checkAuthSession = async (
+  req: AdminRequest,
+  res: Response
+) => {
+  try {
+    console.log("checkAuthSession");
+    if (req.session?.member)
+      res.send(`<script> alert("${req.session.member.memberNick}") </script>`);
+    else res.send(`<script> alert("${Message.NOT_AUTHENTICATED}") </script>`);
+  } catch (err) {
+    console.log("Error, checkAuthSession:", err);
+    res.send(err);
+  }
+};
+
+restaurantController.verifyRestaurant = (
+  req: AdminRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.session?.member?.memberType === MemberType.RESTAURANT) {
+    req.member = req.session.member;
+    next();
+  } else {
+    const message = Message.NOT_AUTHENTICATED;
+    res.send(
+      `<script> alert("${message}"); window.location.replace('/admin/login') </script>`
+    );
   }
 };
 

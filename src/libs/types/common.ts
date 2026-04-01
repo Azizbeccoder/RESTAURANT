@@ -1,1 +1,3 @@
-export type T = Record<string, any>;
+export interface T {
+    [kety: string]: any;
+}

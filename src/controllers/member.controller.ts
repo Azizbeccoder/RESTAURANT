@@ -1,110 +1,160 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response, request, response } from "express";
+import {T} from "../libs/types/common"
 import MemberService from "../models/Member.service";
-import { LoginInput, MemberInput } from "../libs/types/member";
-import { MemberType } from "../libs/enums/member.enum";
-import { createAccessToken, setTokenCookie, clearTokenCookie } from "../libs/utils/jwt.utils";
+import {Member, MemberInput,LoginInput, ExtendedRequest} from '../libs/types/member'
+import Erros, { HttpCode, Message } from "../libs/Errors";
+import AuthService from "../models/Auth.service";
+import { token } from "morgan";
+import { AUTH_TIMER } from "../libs/config";
 
-// Plain object — no TypeScript type issues with property access
-const memberController = {
 
-  goHome: (req: Request, res: Response) => {
-    try {
-      res.render("home", { title: "Home", page: "home", member: req.user || null });
-    } catch (err) {
-      console.log("Error, goHome:", err);
-      res.status(500).send("Server error");
+const memberService = new MemberService();
+const authService = new AuthService();
+
+
+const memberController: T = {};
+
+memberController.getRestaurant = async (req:Request, res:Response) => {
+    try{
+        console.log("getRestaurant");
+        const result = await memberService.getRestaurant()
+
+        res.status(HttpCode.OK).json(result);
+
+
+    } catch(err){
+        console.log("ERROR, getRestaurant", err);
+        if( err instanceof Erros) res.status(err.code).json(err);
+        else res.status(Erros.standard.code).json(Erros.standard )
+        // res.json({})
+        
     }
-  },
+}
 
-  getLogin: (req: Request, res: Response) => {
-    try {
-      res.render("login", { title: "Log In", page: "login", error: null, formData: null });
-    } catch (err) {
-      console.log("Error, getLogin:", err);
+memberController.signup = async (req:Request, res:Response)=>{
+    try{
+        console.log("signup");
+
+        const input:MemberInput = req.body,
+        result:Member = await memberService.signup(input),
+        token = await authService.createToken(result);
+        
+        res.cookie("accessToken", token, {
+            maxAge: AUTH_TIMER * 3600 * 1000,
+            httpOnly: false,
+        })
+
+        res.status(HttpCode.CREATE).json({member:result, accessToken : token})
+    } catch(err){
+        console.log("ERROR, signup", err);
+        if( err instanceof Erros) res.status(err.code).json(err);
+        else res.status(Erros.standard.code).json(Erros.standard )
+        // res.json({})
+        
     }
-  },
+    
+};
+memberController.login = async(req:Request, res:Response)=>{
+    try{ 
+        console.log("login");
+        const input:LoginInput = req.body,
+        result = await memberService.login(input),
+        token = await authService.createToken(result);
 
-  getSignUp: (req: Request, res: Response) => {
-    try {
-      res.render("signup", { title: "Sign Up", page: "signup", error: null, formData: null });
-    } catch (err) {
-      console.log("Error, getSignUp:", err);
+        res.cookie("accessToken", token, {
+            maxAge: AUTH_TIMER * 3600 * 1000,
+            httpOnly: false,
+        })
+
+        res.status(HttpCode.OK).json({member:result, accessToken : token})
+    } catch(err){
+        console.log("ERROR, login", err)
+        if( err instanceof Erros) res.status(err.code).json(err);
+        else res.status(Erros.standard.code).json(Erros.standard )
     }
-  },
+    
+};
 
-  processLogin: async (req: Request, res: Response) => {
-    try {
-      const input: LoginInput = req.body;
-      const memberService = new MemberService();
-      const member = await memberService.processLogin(input);
-
-      const token = createAccessToken(member);
-      setTokenCookie(res, token);
-
-      res.redirect("/");
-    } catch (err) {
-      console.log("Error, processLogin:", err);
-      res.render("login", {
-        title: "Log In",
-        page: "login",
-        error: (err as Error).message || "Login failed.",
-        formData: req.body,
-      });
+memberController.logout = (req: ExtendedRequest, res:Response) =>{
+    try{
+        console.log("logout");
+        res.cookie("accessToken", null, {maxAge: 0, httpOnly: true});
+        res.status(HttpCode.OK).json({ logout: true })
+    } catch(err){
+        if( err instanceof Erros) res.status(err.code).json(err);
+        else res.status(Erros.standard.code).json(Erros.standard )
     }
-  },
+};
 
-  processSignup: async (req: Request, res: Response) => {
-    try {
-      const newMember: MemberInput = req.body;
-      newMember.membertype = MemberType.USER;
+memberController.getMemberdetail = async (req: ExtendedRequest, res:Response) =>{
+    try{
+        console.log("getMemberdetail");
+        const result =  await memberService.getMemberDetail(req.member);
+        
 
-      const memberService = new MemberService();
-      const member = await memberService.processSignup(newMember);
-
-      const token = createAccessToken(member);
-      setTokenCookie(res, token);
-
-      res.redirect("/");
-    } catch (err) {
-      console.log("Error, processSignup:", err);
-      res.render("signup", {
-        title: "Sign Up",
-        page: "signup",
-        error: (err as Error).message || "Signup failed.",
-        formData: req.body,
-      });
+        res.status(HttpCode.OK).json(result);
+    } catch(err){
+        console.log("Error, getMemberDetail:", err);
+        if( err instanceof Erros) res.status(err.code).json(err);
+        else res.status(Erros.standard.code).json(Erros.standard )
     }
-  },
+};
 
-  processLogout: (req: Request, res: Response) => {
-    try {
-      clearTokenCookie(res);
-      res.redirect("/login");
-    } catch (err) {
-      console.log("Error, processLogout:", err);
-      res.status(500).send("Logout failed");
-    }
-  },
+memberController.updateMember = async (req: ExtendedRequest, res:Response ) => {
+    try{
+        console.log("updateMember")
+        const input: MemberInput = req.body;
+        if(req.file) input.memberImage = req.file.path.replace(/\\/, "/");
+        const result = await memberService.updateMember(req.member, input);
 
-  getUsers: async (req: Request, res: Response) => {
-    try {
-      const memberService = new MemberService();
-      const members = await memberService.getMembers();
-      res.render("users", { title: "Members", page: "users", member: req.user || null, members });
-    } catch (err) {
-      console.log("Error, getUsers:", err);
-      res.render("users", { title: "Members", page: "users", member: req.user || null, members: [] });
+        res.status(HttpCode.OK).json(result) 
+    } catch(err){
+        console.log("Error, updateMember:", err);
+        if( err instanceof Erros) res.status(err.code).json(err);
+        else res.status(Erros.standard.code).json(Erros.standard )
     }
-  },
+}
 
-  getProducts: (req: Request, res: Response) => {
-    try {
-      res.render("products", { title: "Menu", page: "products", member: req.user || null, products: [] });
-    } catch (err) {
-      console.log("Error, getProducts:", err);
+memberController.getTopUsers = async (req:Request, res: Response) => {
+    try{
+        console.log("getTopUsers")
+        const result = await memberService.getTopUsers();
+
+        res.status(HttpCode.OK).json(result)
+    } catch(err){
+        console.log("Error, getTopUsers:", err);
+        if( err instanceof Erros) res.status(err.code).json(err);
+        else res.status(Erros.standard.code).json(Erros.standard )
     }
-  },
+}
+
+memberController.verifyAuth = async (req: ExtendedRequest, res:Response, next: NextFunction) => {
+try{
+   const token = req.cookies["accessToken"];
+   if (token) req.member = await authService.checkAuth(token);
+   if(!req.member)
+     throw new Erros(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
+   
+
+   next();
+
+} catch(err) {
+    console.log("ERROR, verifyAuth", err)
+        if( err instanceof Erros) res.status(err.code).json(err);
+        else res.status(Erros.standard.code).json(Erros.standard )
+}
 
 };
 
+
+memberController.retrieveAuth = async (req: ExtendedRequest, res:Response, next: NextFunction) => {
+    try{
+       const token = req.cookies["accessToken"];
+       if (token) req.member = await authService.checkAuth(token);
+    next();
+    } catch(err) {
+        console.log("ERROR, retrieveAuth", err);
+        next();
+    }
+    }
 export default memberController;
