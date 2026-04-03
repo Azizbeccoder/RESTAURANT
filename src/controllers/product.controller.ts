@@ -31,7 +31,6 @@ const productController: T = {};
         console.log("ERROR, getProducts", err);
         if( err instanceof Erros) res.status(err.code).json(err);
         else res.status(Erros.standard.code).json(Erros.standard )
-        // res.json({})
     }
  }
 
@@ -40,7 +39,8 @@ const productController: T = {};
         console.log("getProduct");       
         const {id} = req.params;
         console.log(req.member)
-        const memberId = req.member?._id ?? null;
+        // ❗ FIX: cast memberId to avoid Types.ObjectId vs Schema.Types.ObjectId mismatch
+        const memberId = (req.member?._id ?? null) as any;
         const result = await productService.getProduct(memberId, id)
 
         res.status(HttpCode.OK).json(result)
@@ -50,9 +50,6 @@ const productController: T = {};
         else res.status(Erros.standard.code).json(Erros.standard )
     }
  }
-
-
-
 
 
 /** SSR**/
@@ -66,11 +63,10 @@ productController.getAllProducts = async (req:Request, res:Response)=>{
         console.log("ERROR, getAllProducts", err);
         if( err instanceof Erros) res.status(err.code).json(err);
         else res.status(Erros.standard.code).json(Erros.standard )
-        // res.json({})
-        
     }
     
 };
+
 productController.createNewProduct = async (req:AdminRequest, res:Response)=>{
     try{
         console.log("createNewProduct");
@@ -81,7 +77,6 @@ productController.createNewProduct = async (req:AdminRequest, res:Response)=>{
             return ele.path.replace(/\\/g,"/");
         });
         await productService.createNewProduct(data);
-
 
         res.send(
             `<script> alert("Successfull creation"); window.location.replace('/admin/product/all') </script>`
@@ -98,20 +93,17 @@ productController.createNewProduct = async (req:AdminRequest, res:Response)=>{
 
 productController.updateChosenProduct = async (req:Request, res:Response)=>{
     try{
-
         console.log("updateChosenProduct");
         const id  = req.params.id;
         const result  = await productService.updateChosenProduct(id, req.body)
-
 
         res.status(HttpCode.OK).json({ data: result })
     } catch(err){
         console.log("ERROR, updateChosenProduct", err);
         if( err instanceof Erros) res.status(err.code).json(err);
         else res.status(Erros.standard.code).json(Erros.standard )
-        // res.json({}) 
     }   
 };
 
 
-export default productController
+export default productController;

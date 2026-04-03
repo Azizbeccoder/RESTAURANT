@@ -4,10 +4,11 @@ import { ProductInput, Product, ProductUpdateInput, ProductInquiry } from "../li
 import { shapeIntoMongooseObjectId } from "../libs/config";
 import { T } from "../libs/types/common";
 import { ProductStatus } from "../libs/enums/product.enum";
-import {ObjectId} from "mongoose"
+import { Types } from "mongoose";
 import ViewService from "./View.service";
 import { ViewInput } from "../libs/types/view";
 import { ViewGroup } from "../libs/enums/view.enum";
+
 class ProductService {
 private readonly productModel;
 public viewService;
@@ -16,14 +17,15 @@ public viewService;
         this.productModel = ProductModel;
         this.viewService = new ViewService();
     }
+
     /** SPA */
- 
+
     public async getProducts(inquiry:ProductInquiry):Promise<Product[]>{
         const match: T = {productStatus: ProductStatus.PROCESS};
 
         if(inquiry.productCollection)
             match.productCollection = inquiry.productCollection;
- 
+
         if(inquiry.search) {
             match.productName = {$regex: new RegExp(inquiry.search, "i")};
         }
@@ -32,24 +34,24 @@ public viewService;
          ? {[inquiry.order] : 1}
          : {[inquiry.order] : -1};
 
-         const result = await this.productModel.aggregate([
+        const result = await this.productModel.aggregate([
             {$match: match},
             {$sort: sort},
             {$skip: (inquiry.page * 1 - 1) * inquiry.limit},
             {$limit: inquiry.limit * 1},
-         ])
-         .exec();
+        ])
+        .exec();
 
-         if(!result) throw new Erros(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        if(!result) throw new Erros(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
 
-         return result;
-
+        return result as unknown as Product[];
     }
 
-    public async getProduct(memberId: ObjectId | null, id: string):Promise<Product>{
+    // ❗ FIX: changed ObjectId import to Types.ObjectId
+    public async getProduct(memberId: Types.ObjectId | null, id: string):Promise<Product>{
         const productId = shapeIntoMongooseObjectId(id);
-        
-        let result  = await this.productModel.findOne({
+
+        let result = await this.productModel.findOne({
             _id : productId,
             productStatus: ProductStatus.PROCESS,
         })
@@ -58,32 +60,30 @@ public viewService;
         if(!result) throw new Erros(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
 
         if(memberId) {
-            //Check existence
             const input: ViewInput = {
                 memberId: memberId,
                 viewRefId: productId,
                 viewGroup : ViewGroup.PRODUCT
             };
             const existView = await this.viewService.checkViewExistence(input);
-            
+
             console.log("exist:", !!existView)
             if(!existView) {
-                // Insert View
                 console.log("planning to insert new view")
                 await this.viewService.insertMemberView(input);
 
-                // Increase Counts
-                result = await this.productModel.findByIdAndUpdate(
+                // ❗ FIX: reassign result only if findByIdAndUpdate returns non-null
+                const updated = await this.productModel.findByIdAndUpdate(
                     productId,
                     { $inc: { productViews: +1 }},
                     { new: true }
-                )
+                );
+                if(updated) result = updated;
             }
-
-
         }
 
-        return result
+        // ❗ FIX: cast to resolve string vs enum mismatch
+        return result as unknown as Product;
     }
 
     /** SSR */
@@ -91,19 +91,18 @@ public viewService;
         const result = await this.productModel.find().exec();
         if(!result) throw new Erros(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
 
-         return result;
-
+        // ❗ FIX: cast to resolve string vs enum mismatch
+        return result as unknown as Product[];
     }
-
 
     public async createNewProduct(input: ProductInput): Promise<Product>{
         try{
-            return await this.productModel.create(input);
+            // ❗ FIX: cast to resolve string vs enum mismatch
+            return await this.productModel.create(input) as unknown as Product;
         } catch(err){
-         console.error("Error, model:createNewProduct", err);
-         throw new Erros(HttpCode.BAD_REQUEST, Message.CREATE_FAILED)
+            console.error("Error, model:createNewProduct", err);
+            throw new Erros(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
         }
-
     };
 
     public async updateChosenProduct(id:string, input: ProductUpdateInput): Promise<Product>{
@@ -111,10 +110,9 @@ public viewService;
         const result = await this.productModel.findOneAndUpdate( { _id: id}, input, {new: true} ).exec();
         if(!result) throw new Erros(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
 
-         return result;
-
+        // ❗ FIX: cast to resolve string vs enum mismatch
+        return result as unknown as Product;
     }
-
-
 }
- export default ProductService;
+
+export default ProductService;
