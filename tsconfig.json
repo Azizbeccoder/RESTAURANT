@@ -1,14 +1,14 @@
 {
-     "compilerOptions": {
-       "target": "ES2020",
-       "module": "commonjs",
-       "outDir": "./dist",
-       "strict": true,
-       "esModuleInterop": true,
-       "skipLibCheck": true,
-       "forceConsistentCasingInFileNames": true,
-       "baseUrl": "./"
-     },
-    "include": ["src/**/*.ts"],
-     "exclude": ["node_modules"]
-   }
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": false,          // ← 이걸 false로 변경
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

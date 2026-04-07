@@ -10,7 +10,7 @@ export interface View {
   updateAt: Date;
 }
 
-export interface ViewInput {  
+export interface ViewInput {
   memberId: Types.ObjectId;
   viewRefId: Types.ObjectId;
   viewGroup: ViewGroup;

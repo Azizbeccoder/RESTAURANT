@@ -1,23 +1,23 @@
-import { ObjectId } from "mongoose";
+import { Types } from "mongoose";
 import { OrderStatus } from "../enums/order.enum";
 import { Product } from "./product";
 
 export interface OrderItem {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   itemQuantity: number;
   itemPrice: number;
-  orderId: ObjectId;
-  productId: ObjectId;
+  orderId: Types.ObjectId;
+  productId: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface Order {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   orderTotal: number;
   orderDelivery: number;
   orderStatus: OrderStatus;
-  memberId: ObjectId;
+  memberId: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
   /** from aggregations **/
@@ -32,8 +32,8 @@ export interface OrderItemInput {
   ): unknown;
   itemQuantity: number;
   itemPrice: number;
-  productId: ObjectId;
-  orderId?: ObjectId;
+  productId: Types.ObjectId;
+  orderId?: Types.ObjectId;
 }
 
 export interface OrderInquiry {
