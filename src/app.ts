@@ -12,31 +12,27 @@ import ConnectMongoDB from "connect-mongodb-session";
 import { T } from "./libs/types/common";
 
 const MongoDBStore = ConnectMongoDB(session);
-
 const store = new MongoDBStore({
     uri: String(process.env.MONGO_URL),
     collection: "sessions",
 });
 
+/** ENTRANCE **/
 const app = express();
-
 console.log("__dirname", __dirname);
 
-// middlewares
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-
+app.use("/uploads", express.static("./uploads"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 app.use(morgan(MORGAN_FORMAT));
 
-// sessions
+/** SESSIONS **/
 app.use(
     session({
-        secret: String(process.env.SESSION_SECRET || "secret"),
+        secret: String(process.env.SESSION_SECRET),
         cookie: {
             maxAge: 1000 * 3600 * 6,
         },
@@ -46,19 +42,35 @@ app.use(
     })
 );
 
-// attach session user
-app.use((req, res, next) => {
+app.use(function (req, res, next) {
     const sessionInstance = req.session as T;
-    res.locals.member = sessionInstance?.member;
+    res.locals.member = sessionInstance.member;
     next();
 });
 
-// views
-app.set("views", path.join(__dirname, "views"));
+/** VIEWS (FIXED) **/
+app.set("views", path.join(__dirname, "..", "views"));
 app.set("view engine", "ejs");
 
-// 🔥 ROUTES
-app.use("/admin", routerAdmin);
-app.use("/", router);
+/** PAGE ROUTES (FIXED) **/
+app.get("/", (req, res) => {
+    res.render("home");
+});
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+app.get("/signup", (req, res) => {
+    res.render("signup");
+});
+
+app.get("/products", (req, res) => {
+    res.render("products");
+});
+
+/** ROUTERS **/
+app.use("/admin", routerAdmin); // admin pages
+app.use("/api", router); // 🔥 API (changed from "/")
 
 export default app;

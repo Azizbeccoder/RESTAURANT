@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "*.ts",
+    "controllers/**/*.ts",
+    "models/**/*.ts",
+    "scheme/**/*.ts",
+    "libs/**/*.ts",
+    "router*.ts",
+    "app.ts",
+    "server.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

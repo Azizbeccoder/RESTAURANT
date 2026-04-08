@@ -21,15 +21,11 @@ export interface Order {
   createdAt: Date;
   updatedAt: Date;
   /** from aggregations **/
-  orderItems: OrderItem[];
-  productData: Product[];
+  orderItems?: OrderItem[];
+  productData?: Product[];
 }
 
 export interface OrderItemInput {
-  reduce(
-    arg0: (accumulator: number, item: OrderItemInput) => number,
-    arg1: number
-  ): unknown;
   itemQuantity: number;
   itemPrice: number;
   productId: Types.ObjectId;

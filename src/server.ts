@@ -6,15 +6,15 @@ import app from "./app";
 
 mongoose.connect(process.env.MONGO_URL as string)
 .then(() => {
-    console.log("✅ MongoDB connection succeed");
+    console.log("MongoDb connection succeed");
 
     const PORT = process.env.PORT ?? 3003;
 
-    app.listen(PORT, () => {
-        console.log(`🚀 Server running on http://localhost:${PORT}`);
-        console.log(`Admin: http://localhost:${PORT}/admin`);
+    app.listen(PORT, function () {
+        console.log(`The server is running successfully on PORT: http://localhost:${PORT}`);
+        console.info(`Admin project on http://localhost:${PORT}/admin`);
     });
 })
 .catch((err) => {
-    console.error("❌ ERROR on MongoDB connection", err);
+    console.log("ERROR on connection MongoDb", err);
 });

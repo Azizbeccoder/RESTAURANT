@@ -4,7 +4,7 @@ import { View, ViewInput } from "../libs/types/view";
 
 class ViewService {
   private readonly viewModel;
-  
+
   constructor() {
     this.viewModel = ViewModel;
   }
@@ -12,18 +12,17 @@ class ViewService {
   public async checkViewExistence(input: ViewInput): Promise<View> {
     return await this.viewModel
       .findOne({ memberId: input.memberId, viewRefId: input.viewRefId })
-      .exec();
+      .exec() as unknown as View;
   }
 
   public async insertMemberView(input: ViewInput): Promise<View> {
     try {
-      return await this.viewModel.create(input);
+      return await this.viewModel.create(input) as unknown as View;
     } catch (error) {
       console.log("Error model:insertMemberView", error);
       throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
     }
   }
-
 }
 
 export default ViewService;

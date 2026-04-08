@@ -1,46 +1,43 @@
 export enum HttpCode {
-  OK = 200,
-  CREATE = 201,
-  NOT_MODIFIED = 304,
-  BAD_REQUEST = 400,
-  UNAUTHORIZED = 401,
-  FORBIDDEN = 403,
-  NOT_FOUND = 404,
-  INTERNAL_SERVER_ERROR = 500,
+OK = 200,
+CREATE = 201,
+NOT_MODIFIED = 304,
+BAD_REQUEST = 400,
+UNAUTHORIZED = 401,
+FORBIDDEN = 403,
+NOT_FOUND = 404,
+INTERNAL_SERVER_ERROR = 500
 }
+
 
 export enum Message {
-  SOMETHING_WENT_WRONG = "Something went wrong!",
-  NO_DATA_FOUND = "No data found!",
-  CREATE_FAILED = "Create is failed",
-  UPDATE_FAILED = "Update is failed",
-  USED_NICK_PHONE = "You are inserting already used phone or nick!",
-  BLOCKED_USER = " You have been blocked, contact restaurant!",
-  WRONG_PASSWORD = "Please try again",
-  NO_MEMBER_NICK = "No member with this name",
-  NOT_AUTHENTICATED = "You are not autheticated, login first",
-  TOKEN_CREATION_FAILED = "Token creation error!",
+    SOMETHING_WENT_WRONG = "Something went wrong!",
+    NO_DATA_FOUND = "No data found!",
+    CREATE_FAILED = "Create is failed",
+    UPDATE_FAILED = "Update is failed",
+    USED_NICK_PHONE = "You are inserting already used phone or nick!",
+    BLOCKED_USER = " You have been blocked, contact restaurant!",
+    WRONG_PASSWORD= "Please try again",
+    NO_MEMBER_NICK = "No member with this name",
+    NOT_AUTHENTICATED = "You are not autheticated, login first",
+    TOKEN_CREATION_FAILED = "Token creation error!",
 }
 
-// BUG FIX: Class was named "Erros" (typo). Renamed to "Errors" and re-exported
-// as both "Errors" (default) and "Erros" (named) for backward compatibility
-// across all files that import either spelling.
-class Errors extends Error {
-  public code: HttpCode;
-  public message: Message;
+class Erros extends Error {
+public code: HttpCode;
+public  message: Message;
 
-  static standard = {
-    code: HttpCode.INTERNAL_SERVER_ERROR,
-    message: Message.SOMETHING_WENT_WRONG,
-  };
+static standard = {
+    code:HttpCode.INTERNAL_SERVER_ERROR,
+    message:Message.SOMETHING_WENT_WRONG,
+}
 
-  constructor(statusCode: HttpCode, statusMessage: Message) {
+constructor(statusCode:HttpCode, statusMessage: Message){
     super();
     this.code = statusCode;
-    this.message = statusMessage;
-  }
+    this.message  = statusMessage;
+
+}
 }
 
-// BUG FIX: Export alias so files importing "Erros" still work without changes
-export { Errors as Erros };
-export default Errors;
+export default Erros;

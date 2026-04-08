@@ -3,9 +3,8 @@ import { T } from "../libs/types/common";
 import MemberService from "../models/Member.service";
 import { AdminRequest, LoginInput, MemberInput } from "../libs/types/member";
 import { MemberType } from "../libs/enums/member.enum";
-// BUG FIX: Removed duplicate import of "Erros" — Errors and Erros are now the same
-// class (both exported from Errors.ts). Only one import needed.
 import Errors, { HttpCode, Message } from "../libs/Errors";
+import Erros from "../libs/Errors";
 
 const memberService = new MemberService();
 
@@ -29,7 +28,6 @@ restaurantController.getSignup = (req: Request, res: Response) => {
     res.redirect("/admin");
   }
 };
-
 restaurantController.getLogin = (req: Request, res: Response) => {
   try {
     res.render("login");
@@ -51,11 +49,10 @@ restaurantController.processSignup = async (
       throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
 
     const newMember: MemberInput = req.body;
-    // BUG FIX: file.path may contain backslashes on Windows; normalize to forward slashes
-    newMember.memberImage = file.path.replace(/\\/g, "/");
+    newMember.memberImage = file?.path;
     newMember.memberType = MemberType.RESTAURANT;
     const result = await memberService.processSignup(newMember);
-
+    //TODO: SESSIONS AUTHENTICATION
     req.session.member = result;
     req.session.save(function () {
       res.redirect("/admin/product/all");
@@ -79,6 +76,7 @@ restaurantController.processLogin = async (
 
     const input: LoginInput = req.body;
     const result = await memberService.processLogin(input);
+    //TODO: SESSIONS AUTHENTICATION
 
     req.session.member = result;
     req.session.save(function () {
@@ -96,14 +94,13 @@ restaurantController.processLogin = async (
 
 restaurantController.logout = async (req: AdminRequest, res: Response) => {
   try {
-    // BUG FIX: log message was "processLogin" — corrected to "logout"
-    console.log("logout");
+    console.log("processLogin");
 
     req.session.destroy(function () {
       res.redirect("/admin");
     });
   } catch (err) {
-    console.log("ERROR, logout", err);
+    console.log("ERROR, processLogin", err);
     res.redirect("/admin");
   }
 };
@@ -120,10 +117,7 @@ restaurantController.getUsers = async (req: Request, res: Response) => {
   }
 };
 
-restaurantController.updateChosenUser = async (
-  req: Request,
-  res: Response
-) => {
+restaurantController.updateChosenUser = async (req: Request, res: Response) => {
   try {
     console.log("updateChosenUser");
     const result = await memberService.updateChosenUser(req.body);
@@ -131,8 +125,8 @@ restaurantController.updateChosenUser = async (
     res.status(HttpCode.OK).json({ data: result });
   } catch (err) {
     console.log("ERROR, updateChosenUser", err);
-    if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard);
+    if (err instanceof Erros) res.status(err.code).json(err);
+    else res.status(Erros.standard.code).json(Erros.standard);
   }
 };
 

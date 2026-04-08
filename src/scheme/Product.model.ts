@@ -40,13 +40,11 @@ const productSchema = new Schema(
 
     productVolume: {
       type: Number,
-      enum: Object.values(ProductVolume),
+      enum: ProductVolume,
       default: ProductVolume.ONE,
     },
 
-    // BUG FIX: Field was named "productDesk" but the Product type interface and
-    // product.controller use "productDesc". Renamed to "productDesc".
-    productDesc: {
+    productDesk: {
       type: String,
     },
 
@@ -60,13 +58,11 @@ const productSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true } // updateAt, createAt
 );
 
-// BUG FIX: Index referenced "ProductSize" (capital P) which is the imported enum,
-// not the schema field "productSize". Changed to lowercase "productSize".
 productSchema.index(
-  { productName: 1, productSize: 1, productVolume: 1 },
+  { productName: 1, ProductSize: 1, productVolume: 1 },
   { unique: true }
 );
 

@@ -22,8 +22,7 @@ export enum ProductStatus {
 export enum ProductCollection {
   DISH = "DISH",
   SALAD = "SALAD",
-  // BUG FIX: DESSERT was set to "DELETE" (copy-paste error). Fixed to "DESSERT".
-  DESSERT = "DESSERT",
+  DESSERT = "DELETE",
   DRINK = "DRINK",
   OTHER = "OTHER",
 }
